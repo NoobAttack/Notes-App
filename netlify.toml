@@ -1,5 +1,6 @@
 [build]
-  publish = "\"Vue Notes App\""
+  publish = "Vue Notes App"
+  command = ""
 
 [dev]
-  publish = "\"Vue Notes App\""
+  publish = "Vue Notes App"
