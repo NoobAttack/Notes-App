@@ -1,0 +1,5 @@
+[build]
+  publish = "\"Vue Notes App\""
+
+[dev]
+  publish = "\"Vue Notes App\""

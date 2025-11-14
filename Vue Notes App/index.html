@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Notes App</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+		<div id="app" class="container py-5">
+			<div class="row justify-content-center">
+				<div class="col-lg-8">
+					<div class="card shadow-lg">
+						<div class="card-body">
+							<h2 class="card-title text-center mb-4">Todo List Items</h2>
+							<div class="mb-4 d-flex align-items-center gap-3">
+								<input
+									type="text"
+									id="nameInput"
+									v-model="name"
+									placeholder="type here..."
+									class="form-control form-control-lg flex-grow-1"
+									maxlength="100"
+								/>
+								<span class="text-primary fs-5">{{ name.length }}/100</span>
+								<button
+									class="btn btn-primary btn-lg"
+									@click="addItem"
+									:disabled="name.length > 100 || name.trim() === ''"
+								>
+									Add todo item
+								</button>
+							</div>
+							<ul class="list-group">
+								<li
+									v-for="(item, index) in items"
+									:key="item.text + item.timestamp"
+									class="list-group-item d-flex align-items-center justify-content-between flex-wrap py-4"
+								>
+									<span
+										class="fs-4 flex-grow-1"
+										style="
+											word-break: break-word;
+											white-space: pre-line;
+											overflow-wrap: anywhere;
+										"
+										>{{ item.text }}</span
+									>
+									<span
+										class="text-secondary ms-4 me-4"
+										style="min-width: 180px; text-align: right"
+										>{{ item.timestamp }}</span
+									>
+									<button
+										class="btn btn-outline-danger btn-lg"
+										@click="deleteItem(index)"
+									>
+										Delete
+									</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<style>
+			body {
+				background: #e3f0ff;
+			}
+		</style>
+
+		<script>
+			const app = Vue.createApp({
+				data() {
+					return {
+						name: '',
+						items: [
+							{ text: 'First Item', timestamp: new Date().toLocaleString() },
+							{ text: 'Second Item', timestamp: new Date().toLocaleString() },
+						],
+					};
+				},
+				methods: {
+					addItem() {
+						if (this.name.trim() !== '' && this.name.length <= 100) {
+							this.items.push({
+								text: this.name,
+								timestamp: new Date().toLocaleString(),
+							});
+							this.name = '';
+						}
+					},
+					deleteItem(index) {
+						this.items.splice(index, 1);
+					},
+				},
+			});
+
+			app.mount('#app');
+		</script>
+	</body>
+</html>
