@@ -79,11 +79,12 @@
 				data() {
 					return {
 						name: '',
-						items: [
-							{ text: 'First Item', timestamp: new Date().toLocaleString() },
-							{ text: 'Second Item', timestamp: new Date().toLocaleString() },
-						],
+						items: [],
 					};
+				},
+				mounted() {
+					// Load saved items from localStorage when app starts
+					this.loadFromLocalStorage();
 				},
 				methods: {
 					addItem() {
@@ -93,10 +94,44 @@
 								timestamp: new Date().toLocaleString(),
 							});
 							this.name = '';
+							// Save to localStorage after adding
+							this.saveToLocalStorage();
 						}
 					},
 					deleteItem(index) {
 						this.items.splice(index, 1);
+						// Save to localStorage after deleting
+						this.saveToLocalStorage();
+					},
+					saveToLocalStorage() {
+						// Save items array to browser's localStorage
+						try {
+							localStorage.setItem('notesAppItems', JSON.stringify(this.items));
+						} catch (error) {
+							console.error('Error saving to localStorage:', error);
+						}
+					},
+					loadFromLocalStorage() {
+						// Load items from localStorage if they exist
+						try {
+							const savedItems = localStorage.getItem('notesAppItems');
+							if (savedItems) {
+								this.items = JSON.parse(savedItems);
+							} else {
+								// If no saved data, start with default items
+								this.items = [
+									{ text: 'First Item', timestamp: new Date().toLocaleString() },
+									{ text: 'Second Item', timestamp: new Date().toLocaleString() },
+								];
+							}
+						} catch (error) {
+							console.error('Error loading from localStorage:', error);
+							// Fallback to default items if there's an error
+							this.items = [
+								{ text: 'First Item', timestamp: new Date().toLocaleString() },
+								{ text: 'Second Item', timestamp: new Date().toLocaleString() },
+							];
+						}
 					},
 				},
 			});
